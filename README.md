@@ -26,14 +26,13 @@ delete(g)
 ## Prerequisites
 
 julia >= 1.6.0  
-redisgraph >= 2.8  
+FalkorDB >= 4.0.0  
 
 ## Setup
 
-1. redisgraph needs to be running.
+1. FalkorDB needs to be running.
 
-You can install it [manually](https://docs.redislabs.com/latest/modules/redisgraph/redisgraph-quickstart/)  
-Or you can use [docker container](https://hub.docker.com/r/redislabs/redisgraph) instead of. For example:
+You can use [docker container](https://docs.falkordb.com/getting-started/configuration.html) for this. For example:
 
 ```
 docker run -p 6379:6379 -p 3000:3000 -it --rm falkordb/falkordb:latest
