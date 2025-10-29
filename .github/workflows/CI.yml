@@ -15,9 +15,10 @@ jobs:
     
     services:
       redisgraph:
-        image: redislabs/redisgraph:latest
+        image: falkordb/falkordb:latest
         ports:
           - 6379:6379
+          - 3000:3000
 
     steps:
       - uses: actions/checkout@v2
