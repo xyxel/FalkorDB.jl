@@ -1,6 +1,6 @@
 using Test
 
-using RedisGraph: Graph, getdatabase, setconfig, getconfig, query, ro_query, profile, slowlog
+using FalkorDB: Graph, getdatabase, setconfig, getconfig, query, ro_query, profile, slowlog
 
 
 function creategraph()

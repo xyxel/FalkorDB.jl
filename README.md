@@ -1,9 +1,9 @@
-# RedisGraph Julia client
+# FalkorDB Julia client
 
 ## Usage example
 
 ```julia
-using RedisGraph
+using FalkorDB
 
 db_conn = getdatabase()
 g = Graph("TestGraph", db_conn)
@@ -36,13 +36,13 @@ You can install it [manually](https://docs.redislabs.com/latest/modules/redisgra
 Or you can use [docker container](https://hub.docker.com/r/redislabs/redisgraph) instead of. For example:
 
 ```
-docker run -p 6379:6379 -it --rm redislabs/redisgraph
+docker run -p 6379:6379 -p 3000:3000 -it --rm falkordb/falkordb:latest
 ```
 
-2. add RedisGraph from the github repo
+2. add FalkorDB from the github repo
 
 ```julia
-pkg> add https://github.com/xyxel/RedisGraph.jl
+pkg> add https://github.com/xyxel/FalkorDB.jl
 ```
 
 More information about package management: https://pkgdocs.julialang.org/v1/

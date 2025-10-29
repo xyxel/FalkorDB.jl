@@ -1,9 +1,9 @@
 using Test
 
-using RedisGraph: Node, string
+using FalkorDB: Node, string
 
 
-@testset "RedisGraph.jl node unittests" begin
+@testset "FalkorDB.jl node unittests" begin
     @testset "check node string" begin
         @test string(Node("MyAlias", ["MyLabel1", "MyLabel2"])) == "(MyAlias:MyLabel1:MyLabel2 )"
         node_with_props = Node("MyAlias", ["MyLabel1"], Dict("IntProp" => 1, "StringProp" => "node prop", "BoolProp" => false))

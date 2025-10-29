@@ -1,6 +1,6 @@
 using Test
 
-using RedisGraph: Graph, Node, Edge, Path, addnode!, addedge!, commit, delete, query, getdatabase
+using FalkorDB: Graph, Node, Edge, Path, addnode!, addedge!, commit, delete, query, getdatabase
 
 
 function creategraph()
@@ -28,7 +28,7 @@ end
 
 
 # Looks like in this file should not be query commands, but just testing of parse command
-@testset "RedisGraph.jl result unittests" begin
+@testset "FalkorDB.jl result unittests" begin
     @testset "check simple types" begin
         g = creategraph()
         try

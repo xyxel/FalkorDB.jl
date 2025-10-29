@@ -1,4 +1,4 @@
-module RedisGraph
+module FalkorDB
 
 export getdatabase
 

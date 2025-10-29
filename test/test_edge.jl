@@ -1,9 +1,9 @@
 using Test
 
-using RedisGraph: Node, Edge, string
+using FalkorDB: Node, Edge, string
 
 
-@testset "RedisGraph.jl edge unittests" begin
+@testset "FalkorDB.jl edge unittests" begin
     @testset "check edge string" begin
         node_src = Node("SrcAlias", ["MyLabel1"], Dict("IntProp" => 1))
         node_dst = Node("DstAlias", ["MyLabel1", "MyLabel2"], Dict("BoolProp" => false))
