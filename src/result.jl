@@ -1,3 +1,5 @@
+using Dates
+
 const VALUE_TYPE_UNKNOWN = 0
 const VALUE_TYPE_NULL = 1
 const VALUE_TYPE_STRING = 2
@@ -10,6 +12,10 @@ const VALUE_TYPE_NODE = 8
 const VALUE_TYPE_PATH = 9
 const VALUE_TYPE_MAP = 10
 const VALUE_TYPE_POINT = 11
+const VALUE_TYPE_DATETIME = 13
+const VALUE_TYPE_DATE = 14
+const VALUE_TYPE_TIME = 15
+const VALUE_TYPE_DURATION = 16
 
 struct VALUE_TYPE{x}
 end
@@ -28,6 +34,25 @@ function parsevalue(g::Graph, ::VALUE_TYPE{VALUE_TYPE_NODE}, raw_entry::Vector{T
 function parsevalue(g::Graph, ::VALUE_TYPE{VALUE_TYPE_PATH}, raw_entry::Vector{T} where T) return parsepath(g, raw_entry) end
 function parsevalue(g::Graph, ::VALUE_TYPE{VALUE_TYPE_MAP}, raw_entry::Vector{T} where T) return parsemap(g, raw_entry) end
 function parsevalue(g::Graph, ::VALUE_TYPE{VALUE_TYPE_POINT}, raw_entry::Vector{T} where T) return parsepoint(g, raw_entry) end
+function parsevalue(g::Graph, ::VALUE_TYPE{VALUE_TYPE_DATETIME}, raw_value::Int) return parsedatetime(g, raw_value) end
+function parsevalue(g::Graph, ::VALUE_TYPE{VALUE_TYPE_DATE}, raw_value::Int) return parsedate(g, raw_value) end
+function parsevalue(g::Graph, ::VALUE_TYPE{VALUE_TYPE_TIME}, raw_value::Int) return parsetime(g, raw_value) end
+function parsevalue(g::Graph, ::VALUE_TYPE{VALUE_TYPE_DURATION}, raw_value::Int) return raw_value end
+
+
+function parsedatetime(g::Graph, raw_value::Int)
+    return DateTime(1970, 1, 1) + Millisecond(raw_value) * 1000
+end
+
+
+function parsetime(g::Graph, raw_value::Int)
+    return Time(parsedatetime(g, raw_value))
+end
+
+
+function parsedate(g::Graph, raw_value::Int)
+    return Date(parsedatetime(g, raw_value))
+end
 
 
 function parsepoint(g::Graph, raw_entry::Vector{T} where T)

@@ -1,4 +1,4 @@
-using Test
+using Test, Dates
 
 using FalkorDB: Graph, Node, Edge, Path, addnode!, addedge!, commit, delete, query, getdatabase
 
@@ -60,6 +60,17 @@ end
         finally
             deletegraph!(g)
         end
+    end
+    @testset "check datetime types" begin
+        g = creategraph()
+        try
+            @test query(g, "RETURN localdatetime(\"2025-06-29T13:45:00\")").results[1] == DateTime(2025, 6, 29, 13, 45, 0)
+            @test query(g, "RETURN date(\"2025-09-15\")").results[1] == Date(2025, 9, 15)
+            @test query(g, "RETURN localtime(\"07:26:50\")").results[1] == Time(7, 26, 50)
+            @test query(g, "RETURN duration(\"P1D\") + duration(\"PT12H\")").results[1] == (24 + 12) * 60 * 60
+        finally
+            deletegraph!(g)
+        end    
     end
     @testset "check simple relation" begin
         g = creategraph()
