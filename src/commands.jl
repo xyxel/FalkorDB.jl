@@ -61,3 +61,8 @@ end
 function getconfig(g::Graph, param_name::String)
     return execute_command(g.redis_conn, flatten(["GRAPH.CONFIG", "GET", param_name]))
 end
+
+
+function explain(g::Graph, q::String)
+    return execute_command(g.redis_conn, flatten(["GRAPH.EXPLAIN", g.id, q, "--compact"]))
+end

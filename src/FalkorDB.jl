@@ -6,7 +6,7 @@ export Node, Edge, Path, Graph, QueryResult
 
 export addnode!, addedge!
 
-export commit, query, ro_query, profile, slowlog, flush!, delete, merge, setconfig, getconfig
+export commit, query, ro_query, profile, slowlog, flush!, delete, merge, setconfig, getconfig, explain
 
 include("connection.jl")
 include("node.jl")
