@@ -1,6 +1,5 @@
 using Test
-
-using FalkorDB: Graph, getdatabase, setconfig, getconfig, query, ro_query, profile, slowlog, listgraphs
+using FalkorDB
 
 
 function test_command_basic()
@@ -43,7 +42,8 @@ function test_listgraphs_command()
             addnode!(g1, node1)
             commit(g1)
 
-            @test listgraphs(db_conn) == ["FirstTestGraph"]
+            @test "FirstTestGraph" in listgraphs(db_conn)
+            @test ~("SecondTestGraph" in listgraphs(db_conn))
 
             node2 = Node("SecondSimpleNode", ["Label2", "Label3"])
             edge = Edge("SimpleEdge", node1, node2, Dict("IntProp" => 1, "StringProp" => "node prop", "BoolProp" => false))
@@ -52,16 +52,49 @@ function test_listgraphs_command()
             addedge!(g2, edge)
             commit(g2)
 
-            @test listgraphs(db_conn) == ["FirstTestGraph", "SecondTestGraph"]
+            @test "FirstTestGraph" in listgraphs(db_conn)
+            @test "SecondTestGraph" in listgraphs(db_conn)
 
             delete(g1)
-            @test listgraphs(db_conn) == ["SecondTestGraph"]
+            @test ~("FirstTestGraph" in listgraphs(db_conn))
+            @test "SecondTestGraph" in listgraphs(db_conn)
 
             delete(g2)
-            @test listgraphs(db_conn) == []
+            @test ~("FirstTestGraph" in listgraphs(db_conn))
+            @test ~("SecondTestGraph" in listgraphs(db_conn))
         finally
-            for g in listgraphs(db_conn)
-                delete(g)
+            if g1.id in listgraphs(db_conn)
+                delete(g1)
+            end
+            if g2.id in listgraphs(db_conn)
+                delete(g2)
+            end
+        end
+    end
+end
+
+
+function test_copy_command()
+    @testset "Check copy command" begin
+        db_conn = getdatabase()
+        g1 = Graph("TestGraph", db_conn)
+        g2 = Graph("CopiedTestGraph", db_conn)
+        try
+            nodealias = "FirstSimpleNode"
+            node1 = Node(nodealias, ["Label1"])
+            addnode!(g1, node1)
+            commit(g1)
+            
+            g2 = copygraph(g1, "CopiedTestGraph")
+
+            @test "CopiedTestGraph" in listgraphs(db_conn)
+            @test query(g2, "MATCH (n) RETURN n").results[1].labels == ["Label1"]
+        finally
+            if g1.id in listgraphs(db_conn)
+                delete(g1)
+            end
+            if g2.id in listgraphs(db_conn)
+                delete(g2)
             end
         end
     end
@@ -71,4 +104,5 @@ end
 @testset "Check FalkorDB commands" begin
     test_command_basic()
     test_listgraphs_command()
+    test_copy_command()
 end

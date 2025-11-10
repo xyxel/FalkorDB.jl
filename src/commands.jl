@@ -71,3 +71,9 @@ end
 function listgraphs(db_conn::RedisConnectionBase)
     return execute_command(db_conn, ["GRAPH.LIST"])
 end
+
+
+function copygraph(g::Graph, newid::String)
+    execute_command(g.redis_conn, flatten(["GRAPH.COPY", g.id, newid]))
+    return Graph(newid, g.redis_conn)
+end
