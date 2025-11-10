@@ -1,13 +1,12 @@
 module FalkorDB
 
-export getdatabase
+export getdatabase, listgraphs, setconfig, getconfig
 
 export Node, Edge, Path, Graph, QueryResult
 
 export addnode!, addedge!, commit, flush!
-export query, ro_query, delete, merge, setconfig, getconfig
+export query, ro_query, delete, merge, copygraph
 export profile, slowlog, explain
-export listgraphs, copygraph
 
 include("connection.jl")
 include("node.jl")

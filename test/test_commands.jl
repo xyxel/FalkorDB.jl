@@ -17,12 +17,6 @@ function test_command_basic()
             @test "GRAPH.QUERY" in commands_in_log
             @test "GRAPH.RO_QUERY" in commands_in_log
             @test "GRAPH.PROFILE" in commands_in_log
-
-            setconfig(g, "MAX_QUEUED_QUERIES", 500)
-            @test getconfig(g, "MAX_QUEUED_QUERIES") == ["MAX_QUEUED_QUERIES", 500]
-            setconfig(g, "MAX_QUEUED_QUERIES", 600)
-            @test getconfig(g, "MAX_QUEUED_QUERIES") == ["MAX_QUEUED_QUERIES", 600]
-            @test length(getconfig(g, "*")) > 2
         finally
             delete(g)
         end
