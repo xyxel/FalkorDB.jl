@@ -1,4 +1,4 @@
-using Redis: execute_command, flatten
+using Redis: RedisConnectionBase, execute_command, flatten
 
 
 function commit(g::Graph)
@@ -65,4 +65,9 @@ end
 
 function explain(g::Graph, q::String)
     return execute_command(g.redis_conn, flatten(["GRAPH.EXPLAIN", g.id, q, "--compact"]))
+end
+
+
+function listgraphs(db_conn::RedisConnectionBase)
+    return execute_command(db_conn, ["GRAPH.LIST"])
 end
