@@ -95,8 +95,28 @@ function test_copy_command()
 end
 
 
+function test_mandatory_constraint()
+    @testset "Check mandatory constraint" begin
+        db_conn = getdatabase()
+        g = Graph("TestGraph", db_conn)
+        try
+            node = Node("FirstSimpleNode", ["Label1"])
+            addnode!(g, node)
+            commit(g)
+
+            @test create_constraint(g, CONSTRAINT_TYPE_MANDATORY, ENTITY_TYPE_NODE, "label1", ["a", "b"]) == "PENDING"
+            @test drop_constraint(g, CONSTRAINT_TYPE_MANDATORY, ENTITY_TYPE_NODE, "label1", ["a", "b"]) == "OK"
+
+        finally
+            delete(g)
+        end
+    end
+end
+
+
 @testset "Check FalkorDB commands" begin
     test_command_basic()
     test_listgraphs_command()
     test_copy_command()
+    test_mandatory_constraint()
 end
