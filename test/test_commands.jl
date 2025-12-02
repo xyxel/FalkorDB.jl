@@ -105,6 +105,8 @@ function test_mandatory_constraint()
             commit(g)
 
             @test create_constraint(g, CONSTRAINT_TYPE_MANDATORY, ENTITY_TYPE_NODE, "label1", ["a", "b"]) == "PENDING"
+            @test list_constraints(g)[1]["type"] == "MANDATORY"
+            @test list_constraints(g)[1]["properties"] == ["a", "b"]
             @test drop_constraint(g, CONSTRAINT_TYPE_MANDATORY, ENTITY_TYPE_NODE, "label1", ["a", "b"]) == "OK"
 
         finally

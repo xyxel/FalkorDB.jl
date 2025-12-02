@@ -106,3 +106,17 @@ function drop_constraint(g::Graph,
                          props::Vector)
     return handle_constraint(g, "DROP", constraint_type, entity_type, label, props)
 end
+
+
+function list_constraints(g::Graph)
+    result = call_procedure(g, "DB.CONSTRAINTS").results
+    constraints = Vector{Dict{String, Any}}()
+    for row in result
+        push!(constraints, Dict("type" => row[1],
+                                "label" => row[2],
+                                "properties" => row[3],
+                                "entitytype" => row[4],
+                                "status" => row[5]))
+    end
+    return constraints
+end
