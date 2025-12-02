@@ -7,9 +7,9 @@ function test_command_basic()
         db_conn = getdatabase()
         g = Graph("TestGraph", db_conn)
         try
-            @test query(g, "RETURN null").results[1] === nothing
+            @test query(g, "RETURN null").results[1][1] === nothing
 
-            @test ro_query(g, "RETURN [1, null, 'test', 3.0, false]").results[1] == [1, nothing, "test", 3.0, false]
+            @test ro_query(g, "RETURN [1, null, 'test', 3.0, false]").results[1][1] == [1, nothing, "test", 3.0, false]
 
             @test occursin("Records produced: 1", profile(g, "RETURN null")[1])
 
@@ -82,7 +82,7 @@ function test_copy_command()
             g2 = copygraph(g1, "CopiedTestGraph")
 
             @test "CopiedTestGraph" in listgraphs(db_conn)
-            @test query(g2, "MATCH (n) RETURN n").results[1].labels == ["Label1"]
+            @test query(g2, "MATCH (n) RETURN n").results[1][1].labels == ["Label1"]
         finally
             if g1.id in listgraphs(db_conn)
                 delete(g1)

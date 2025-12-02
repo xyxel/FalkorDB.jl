@@ -32,12 +32,12 @@ end
     @testset "check simple types" begin
         g = creategraph()
         try
-            @test query(g, "RETURN null").results[1] === nothing
-            @test query(g, "RETURN 2").results[1] == 2
-            @test query(g, "RETURN 2.0").results[1] == 2.0
-            @test query(g, "RETURN true").results[1] == true
-            @test query(g, "RETURN [1, null, 'test', 3.0, false]").results[1] == [1, nothing, "test", 3.0, false]
-            @test query(g, "RETURN {a: 1, b: null, c: 'test', d: 3.0, e: false}").results[1] == Dict("a" => 1, "b" => nothing, "c" => "test", "d" => 3.0, "e" => false)
+            @test query(g, "RETURN null").results[1][1] === nothing
+            @test query(g, "RETURN 2").results[1][1] == 2
+            @test query(g, "RETURN 2.0").results[1][1] == 2.0
+            @test query(g, "RETURN true").results[1][1] == true
+            @test query(g, "RETURN [1, null, 'test', 3.0, false]").results[1][1] == [1, nothing, "test", 3.0, false]
+            @test query(g, "RETURN {a: 1, b: null, c: 'test', d: 3.0, e: false}").results[1][1] == Dict("a" => 1, "b" => nothing, "c" => "test", "d" => 3.0, "e" => false)
         finally
             deletegraph!(g)
         end
@@ -48,13 +48,13 @@ end
             # this set is from https://github.com/RedisGraph/redisgraph-py
             expected_lat = 32.070794860
             expected_lon = 34.820751118
-            actual = query(g, "RETURN point({latitude: 32.070794860, longitude: 34.820751118})").results[1]
+            actual = query(g, "RETURN point({latitude: 32.070794860, longitude: 34.820751118})").results[1][1]
             @test abs(actual["latitude"] - expected_lat) < 0.001
             @test abs(actual["longitude"] - expected_lon) < 0.001
     
             expected_lat = 32
             expected_lon = 34
-            actual = query(g, "RETURN point({latitude: 32, longitude: 34.0})").results[1]
+            actual = query(g, "RETURN point({latitude: 32, longitude: 34.0})").results[1][1]
             @test abs(actual["latitude"] - expected_lat) < 0.001
             @test abs(actual["longitude"] - expected_lon) < 0.001
         finally
@@ -64,10 +64,10 @@ end
     @testset "check datetime types" begin
         g = creategraph()
         try
-            @test query(g, "RETURN localdatetime(\"2025-06-29T13:45:00\")").results[1] == DateTime(2025, 6, 29, 13, 45, 0)
-            @test query(g, "RETURN date(\"2025-09-15\")").results[1] == Date(2025, 9, 15)
-            @test query(g, "RETURN localtime(\"07:26:50\")").results[1] == Time(7, 26, 50)
-            @test query(g, "RETURN duration(\"P1D\") + duration(\"PT12H\")").results[1] == (24 + 12) * 60 * 60
+            @test query(g, "RETURN localdatetime(\"2025-06-29T13:45:00\")").results[1][1] == DateTime(2025, 6, 29, 13, 45, 0)
+            @test query(g, "RETURN date(\"2025-09-15\")").results[1][1] == Date(2025, 9, 15)
+            @test query(g, "RETURN localtime(\"07:26:50\")").results[1][1] == Time(7, 26, 50)
+            @test query(g, "RETURN duration(\"P1D\") + duration(\"PT12H\")").results[1][1] == (24 + 12) * 60 * 60
         finally
             deletegraph!(g)
         end    
@@ -77,7 +77,7 @@ end
         try
             simplerelation!(g)
 
-            q = query(g, "MATCH (n1)-[e]->(n2) RETURN n1, e, n2").results
+            q = query(g, "MATCH (n1)-[e]->(n2) RETURN n1, e, n2").results[1]
             node1, edge, node2 = q[1:3]
             
             @test typeof(node1) == Node
@@ -106,7 +106,7 @@ end
             addedge!(g, edge)
             res = commit(g)
 
-            result_path = query(g, "MATCH p=(n1)-[e]->(n2) RETURN p").results[1]
+            result_path = query(g, "MATCH p=(n1)-[e]->(n2) RETURN p").results[1][1]
 
             @test typeof(result_path) == Path
             @test result_path.nodes == Path([node1, node2], [edge]).nodes

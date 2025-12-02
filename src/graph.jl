@@ -48,7 +48,7 @@ end
 function lazy_update_cache!(cache::Cache, g::Graph, attr_name::String, required_idx::Int)
     if required_idx > length(getproperty(cache, Symbol(attr_name)))
         updated_value = call_procedure(g, "db.$attr_name").results
-        setproperty!(cache, Symbol(attr_name), updated_value)
+        setproperty!(cache, Symbol(attr_name), [value[1] for value in updated_value])
     end
 end
 

@@ -143,12 +143,14 @@ function parseresults(g::Graph, raw_results::Vector{Vector{T} where T})
     end
 
     header = ResultHeaderEntry.(raw_results[1])
-    results = Vector{Any}()
+    results = Vector{Vector{Any}}()
     for row in raw_results[2]
-        for (header_entry, raw_result_entry) in zip(header, row)
+        result = Vector{Any}()
+        for raw_result_entry in row
             entry = parsevalue(g, VALUE_TYPE(raw_result_entry[1]), raw_result_entry[2])
-            push!(results, entry)
+            push!(result, entry)
         end
+        push!(results, result)
     end
     return header, results
 end
@@ -164,7 +166,7 @@ end
 struct QueryResult
     statistics::Dict{String, Float64}
     header::Union{Vector{ResultHeaderEntry}, Nothing}
-    results::Union{Vector{Any}, Nothing}
+    results::Union{Vector{Vector{Any}}, Nothing}
     function QueryResult(g::Graph, raw_query_result::Vector{Vector{String}})
         stats = parsestatistics(raw_query_result[length(raw_query_result)])
         new(stats, nothing, nothing)
